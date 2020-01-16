@@ -29,6 +29,8 @@ elif [ $1 = "add" ]; then
 
 PROJECT=$2
 FILE="/etc/apache2/sites-available/$PROJECT.conf"
+FILE2="/mnt/c/htdocs/$PROJECT/index.php"
+mkdir /mnt/c/htdocs/$PROJECT
 
 if [ -f $FILE ]; then
 echo "Project $PROJECT already exists."
@@ -50,8 +52,8 @@ fi
 
 cat > $FILE << EOF
 <VirtualHost *:80>
-  ServerAdmin david@close2.de
-  ServerName $PROJECT.local.vielhuber.de
+  ServerAdmin mhoffmann@madomadu.de
+  ServerName $PROJECT.local.shellies.info
   DocumentRoot /mnt/c/htdocs/$FOLDER
   ErrorLog ${APACHE_LOG_DIR}/error.log
   CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -63,8 +65,8 @@ cat > $FILE << EOF
   $PHP_LINE
 </VirtualHost>
 <VirtualHost *:443>
-  ServerAdmin david@close2.de
-  ServerName $PROJECT.local.vielhuber.de
+  ServerAdmin mhoffmann@madomadu.de
+  ServerName $PROJECT.local.shellies.info
   DocumentRoot /mnt/c/htdocs/$FOLDER
   ErrorLog ${APACHE_LOG_DIR}/error.log
   CustomLog ${APACHE_LOG_DIR}/access.log combined
@@ -79,6 +81,11 @@ cat > $FILE << EOF
   SSLCertificateKeyFile /mnt/c/htdocs/lamp/ssl.key
 </VirtualHost>
 EOF
+
+cat > $FILE2 << EOF
+<?php echo "$PROJECT.local.shellies.info"; ?>
+EOF
+
 sudo a2ensite $PROJECT.conf
 sudo service apache2 reload
 fi
@@ -100,4 +107,4 @@ else
 
 echo "unknown method"
 
-fi 
+fi
